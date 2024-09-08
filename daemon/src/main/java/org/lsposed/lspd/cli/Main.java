@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +76,7 @@ class LogCommand implements Callable<Integer> {
         while (true) {
             String sLine;
             try {
-                sLine = br.readLine();
+                sLine = BoundedLineReader.readLine(br, 5_000_000);
             } catch (IOException ioe) { break; }
             if (sLine == null) {
                 if (bFollow) {
