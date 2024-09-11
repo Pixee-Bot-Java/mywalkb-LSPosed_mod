@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import io.github.pixee.security.BoundedLineReader;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
@@ -366,7 +367,7 @@ public class ConfigFileManager {
         try (var in = apkFile.getInputStream(initEntry)) {
             var reader = new BufferedReader(new InputStreamReader(in));
             String name;
-            while ((name = reader.readLine()) != null) {
+            while ((name = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 name = name.trim();
                 if (name.isEmpty() || name.startsWith("#")) continue;
                 names.add(name);

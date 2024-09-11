@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.dialog;
 
+import io.github.pixee.security.BoundedLineReader;
 import static org.lsposed.manager.App.TAG;
 
 import android.content.Context;
@@ -119,7 +120,7 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
             var inputStream = new ParcelFileDescriptor.AutoCloseInputStream(readSide);
             var reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            for (var line = ""; line != null; line = reader.readLine()) {
+            for (var line = ""; line != null; line = BoundedLineReader.readLine(reader, 5_000_000)) {
                 if (line.length() > 0) {
                     var showLine = line + "\n";
                     view.post(() -> {
