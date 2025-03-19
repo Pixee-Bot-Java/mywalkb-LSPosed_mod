@@ -1,5 +1,7 @@
 package org.lsposed.lspd.util;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
@@ -28,7 +30,7 @@ final class ClassPathURLStreamHandler extends Handler {
         if (jarFile.getEntry(entryName) != null) {
             try {
                 String encodedName = ParseUtil.encodePath(entryName, false);
-                return new URL("jar", null, -1, fileUri + "!/" + encodedName, this);
+                return Urls.create("jar", null, -1, fileUri + "!/" + encodedName, this, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Invalid entry name", e);
             }
